@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Отмена брони — STУDИЯ КОRБ.ЗVУКА{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 560px; margin: 0 auto;">
+    <h1>Отмена бронирования</h1>
+    <div class="subtitle">Подтвердите отмену сеанса записи.</div>
+
+    <div class="booking-item" style="background: rgba(255, 80, 80, 0.06);
+                                     border-color: rgba(255, 80, 80, 0.2);">
+        <div class="booking-info">
+            <div class="booking-title">{{ booking.studio.name }}</div>
+            <div class="booking-meta">
+                <span>📅 {{ booking.date|date:"d.m.Y" }}</span>
+                <span>🕐 {{ booking.start_time|time:"H:i" }}</span>
+                <span>⏱ {{ booking.duration_hours }} ч.</span>
+            </div>
+        </div>
+    </div>
+
+    <p style="margin: 24px 0; color: #aaa; font-size: 14px;">
+        Внимание: после отмены бронь нельзя будет восстановить.
+        Если до сеанса осталось менее 24 часов, возможны штрафные условия.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div style="display: flex; gap: 12px;">
+            <a href="{% url 'dashboard:index' %}" class="btn btn-secondary">
+                Назад
+            </a>
+            <button type="submit" class="btn btn-danger" style="flex:1;">
+                Подтвердить отмену
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

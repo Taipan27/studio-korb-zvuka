@@ -1,0 +1,78 @@
+### STУDИЯ КОRБ.ЗVУКА — каталог HTTP-эндпоинтов
+###
+### Использование:
+###   - VS Code: расширение REST Client (humao.rest-client)
+###   - JetBrains IDE (PyCharm/IntelliJ): встроенный HTTP Client
+###
+### Сервер должен быть запущен (run.bat).
+###
+### CSRF: Django требует csrftoken для всех POST. Перед каждым POST выполни
+### соответствующий GET (или GET /accounts/login/), чтобы получить cookie.
+### REST Client сохраняет cookies автоматически. Значение csrftoken можно
+### взять из cookie или из скрытого поля формы в HTML ответа.
+
+@host = http://127.0.0.1:8000
+
+### ════════════════════════════ Регистрация и вход ════════════════════════════
+
+### GET страницы регистрации (CSRF в HTML формы)
+GET {{host}}/accounts/register/
+
+### POST регистрации нового пользователя
+### Замени PASTE_TOKEN_HERE на csrfmiddlewaretoken из ответа выше.
+POST {{host}}/accounts/register/
+Content-Type: application/x-www-form-urlencoded
+
+csrfmiddlewaretoken=PASTE_TOKEN_HERE&username=newuser&first_name=Тест&email=test@studio.ru&password1=Pa$$w0rd-test&password2=Pa$$w0rd-test
+
+### GET страницы входа
+GET {{host}}/accounts/login/
+
+### POST входа: демо-пользователь roman / demo1234
+POST {{host}}/accounts/login/
+Content-Type: application/x-www-form-urlencoded
+
+csrfmiddlewaretoken=PASTE_TOKEN_HERE&username=roman&password=demo1234
+
+### POST выхода (требует логина)
+POST {{host}}/accounts/logout/
+Content-Type: application/x-www-form-urlencoded
+
+csrfmiddlewaretoken=PASTE_TOKEN_HERE
+
+### ════════════════════════════ Личный кабинет ════════════════════════════════
+
+### GET дашборда: активные брони, история, статистика (требует логина)
+GET {{host}}/dashboard/
+
+### ════════════════════════════ Бронирование ══════════════════════════════════
+
+### GET формы новой брони (список активных студий + CSRF)
+GET {{host}}/bookings/new/
+
+### POST новой брони
+### studio=ID комнаты из формы выше; date в формате YYYY-MM-DD (только сегодня и далее).
+POST {{host}}/bookings/new/
+Content-Type: application/x-www-form-urlencoded
+
+csrfmiddlewaretoken=PASTE_TOKEN_HERE&studio=1&date=2026-05-20&start_time=14:00&duration_hours=2&comment=Демо через HTTP
+
+### GET страницы подтверждения отмены брони (id=1, замени на свой)
+GET {{host}}/bookings/1/cancel/
+
+### POST подтверждения отмены
+POST {{host}}/bookings/1/cancel/
+Content-Type: application/x-www-form-urlencoded
+
+csrfmiddlewaretoken=PASTE_TOKEN_HERE
+
+### ════════════════════════════ Админ-панель ══════════════════════════════════
+
+### GET формы входа в админку (admin / admin1234)
+GET {{host}}/admin/login/
+
+### Список бронирований в админке (после логина)
+GET {{host}}/admin/bookings/booking/
+
+### Список студий в админке
+GET {{host}}/admin/bookings/studio/

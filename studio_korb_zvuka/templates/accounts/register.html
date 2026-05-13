@@ -1,0 +1,41 @@
+{% load static %}<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация — STУDИЯ КОRБ.ЗVУКА</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-logo">STУDИЯ КОRБ.ЗVУКА</div>
+            <div class="auth-subtitle">Создайте аккаунт исполнителя</div>
+
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <div class="help-text">{{ field.help_text|safe }}</div>
+                    {% endif %}
+                    {% if field.errors %}
+                        <ul class="errorlist">
+                            {% for e in field.errors %}<li>{{ e }}</li>{% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">
+                    Зарегистрироваться
+                </button>
+            </form>
+
+            <div class="auth-link">
+                Уже есть аккаунт? <a href="{% url 'accounts:login' %}">Войти</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
